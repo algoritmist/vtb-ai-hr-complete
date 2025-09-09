@@ -1,0 +1,40 @@
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio-ai-hr
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: 12345678
+      MINIO_ACCESS_KEY: root
+      MINIO_SECRET_KEY: 12345678
+    volumes:
+      - ~/minio/data:/data
+    network_mode: "host"
+    command: server /data --console-address ":9001"
+  hr_backend:
+    depends_on:
+      - db
+      - minio
+    build: .
+    ports:
+      - "9200:9200"
+    volumes:
+      - .:/app
+    network_mode: "host"
+  db: 
+    image: postgres:16-alpine # Use the official PostgreSQL image (e.g., version 16, Alpine variant for smaller size)
+    restart: always # Ensure the container restarts if it stops
+    environment: # Set environment variables for PostgreSQL configuration
+      POSTGRES_USER: postgres # Define the PostgreSQL superuser username
+      POSTGRES_PASSWORD: postgres # Define the PostgreSQL superuser password
+      POSTGRES_DB: default # Define the default database to be created
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Mount a named volume to persist database data
+    ports:
+      - "5432:5432" # Map host port 5432 to container port 5432 for external access
+    network_mode: "host"
+volumes:
+  pgdata:

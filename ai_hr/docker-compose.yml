@@ -1,0 +1,7 @@
+services:
+  ml:
+    build: .
+    container_name: ml-ai-hr
+    ports:
+      - "9300:9300"
+    network_mode: "host"
