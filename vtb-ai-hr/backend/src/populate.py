@@ -174,6 +174,7 @@ def populate():
     finance_vacancy_id = vacancy_create(vacancy_business_analyst)
 
     interview_it_specialist_1 = InterviewSchema(
+        id="b74abe2f-ff91-4df6-9894-7b37591f37bd",
         candidate_id=it_specialist_id_1,
         vacancy_id=it_vacancy_id,
         start_time=(datetime.now() + timedelta(days=15)),
